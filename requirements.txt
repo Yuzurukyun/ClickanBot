@@ -1,0 +1,4 @@
+discord
+dnspython
+aiohttp
+dotenv
