@@ -49,7 +49,7 @@ class AnonMSGForm(discord.ui.Modal, title="Send Anonymous Message"):
         embed = discord.Embed(
             title="Anonymous Message Sent",
             description=f"{self.message.value}",
-            color=discord.Color.green(),
+            color=discord.Color.random(),
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
