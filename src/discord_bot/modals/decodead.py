@@ -19,7 +19,14 @@ class AnonMSGButton(discord.ui.View):
     async def message_button_callback(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
-        await interaction.response.send_modal(AnonMSGForm(bot=self.bot, channel=self.channel))
+        try:
+            await interaction.response.send_modal(AnonMSGForm(bot=self.bot, channel=self.channel))
+        except Exception as e:
+            await interaction.response.send_message(
+                f"An error occurred while opening the modal. Please try again later. Error: {str(e)}",
+                ephemeral=True,
+            )
+            self.bot.log_bot(f"Error in AnonMSGButton: {str(e)}")
 
 
 class AnonMSGForm(discord.ui.Modal, title="Send Anonymous Message"):
@@ -39,19 +46,26 @@ class AnonMSGForm(discord.ui.Modal, title="Send Anonymous Message"):
         self.channel: discord.TextChannel | discord.Thread = channel
 
     async def on_submit(self, interaction: discord.Interaction):
-        get_channel = await self.bot.get_discord_channel(self.channel.id)
-        if get_channel:
-            await get_channel.send(embed=self.message_embed(self.message.value))
-            await self.bot.log_decodead_message(
-                user=interaction.user, channel=get_channel, message=self.message.value
-            )
+        try:
+            get_channel = await self.bot.get_discord_channel(self.channel.id)
+            if get_channel:
+                await get_channel.send(embed=self.message_embed(self.message.value))
+                await self.bot.log_decodead_message(
+                    user=interaction.user, channel=get_channel, message=self.message.value
+                )
 
-        embed = discord.Embed(
-            title="Anonymous Message Sent",
-            description=f"{self.message.value}",
-            color=discord.Color.random(),
-        )
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+            embed = discord.Embed(
+                title="Anonymous Message Sent",
+                description=f"{self.message.value}",
+                color=discord.Color.random(),
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        except Exception as e:
+            await interaction.response.send_message(
+                f"An error occurred while sending your message. Please try again later. Error: {str(e)}",
+                ephemeral=True,
+            )
+            self.bot.log_bot(f"Error in AnonMSGForm: {str(e)}")
 
     def message_embed(self, message_content: str) -> discord.Embed:
         # Placeholder for any message formatting or sanitization if needed.
