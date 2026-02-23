@@ -176,7 +176,9 @@ class DiscordBot(commands.Bot):
             except Exception as e:
                 self.log_bot(str(e))
 
-    async def get_discord_channel(self, channel_id: int) -> discord.TextChannel:
+    async def get_discord_channel(
+        self, channel_id: int
+    ) -> discord.TextChannel | discord.Thread | None:
         obj = self.get_channel(channel_id)
         return obj if obj is not None else await self.fetch_channel(channel_id)
 

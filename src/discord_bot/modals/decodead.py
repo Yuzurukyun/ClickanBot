@@ -11,7 +11,7 @@ class AnonMSGButton(discord.ui.View):
     def __init__(
         self, bot: DiscordBot, channel: discord.TextChannel | discord.Thread, *args, **kwargs
     ):
-        super().__init__(*args, **kwargs)
+        super().__init__(timeout=None, *args, **kwargs)
         self.bot: DiscordBot = bot
         self.channel: discord.TextChannel | discord.Thread = channel
 
@@ -34,7 +34,7 @@ class AnonMSGForm(discord.ui.Modal, title="Send Anonymous Message"):
     def __init__(
         self, bot: DiscordBot, channel: discord.TextChannel | discord.Thread, *args, **kwargs
     ):
-        super().__init__(*args, **kwargs)
+        super().__init__(timeout=None, *args, **kwargs)
         self.bot: DiscordBot = bot
         self.channel: discord.TextChannel | discord.Thread = channel
 
